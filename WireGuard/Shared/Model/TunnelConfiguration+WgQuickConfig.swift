@@ -21,6 +21,9 @@ extension TunnelConfiguration {
         case interfaceHasInvalidAddress(String)
         case interfaceHasInvalidDNS(String)
         case interfaceHasInvalidMTU(String)
+        case interfaceHasInvalidEchoAddress(String)
+        case interfaceHasInvalidEchoPort(String)
+        case interfaceHasInvalidClientId(String)
         case interfaceHasUnrecognizedKey(String)
         case peerHasNoPublicKey
         case peerHasInvalidPublicKey(String)
@@ -71,7 +74,7 @@ extension TunnelConfiguration {
                     } else {
                         attributes[key] = value
                     }
-                    let interfaceSectionKeys: Set<String> = ["privatekey", "listenport", "address", "dns", "mtu"]
+                    let interfaceSectionKeys: Set<String> = ["privatekey", "listenport", "address", "dns", "mtu", "echoaddress", "echoport", "clientid"]
                     let peerSectionKeys: Set<String> = ["publickey", "presharedkey", "allowedips", "endpoint", "persistentkeepalive"]
                     if parserState == .inInterfaceSection {
                         guard interfaceSectionKeys.contains(key) else {
@@ -142,6 +145,15 @@ extension TunnelConfiguration {
         if let mtu = interface.mtu {
             output.append("MTU = \(mtu)\n")
         }
+        if let echoAddress = interface.echoAddress {
+            output.append("EchoAddress = \(echoAddress.stringRepresentation)\n")
+        }
+        if let echoPort = interface.echoPort {
+            output.append("EchoPort = \(echoPort)\n")
+        }
+        if let clientId = interface.clientId {
+            output.append("ClientId = \(clientId)\n")
+        }
 
         for peer in peers {
             output.append("\n[Peer]\n")
@@ -206,6 +218,25 @@ extension TunnelConfiguration {
             }
             interface.mtu = mtu
         }
+        if let echoAddressString = attributes["echoaddress"] {
+            guard let address = IPAddressRange(from: echoAddressString) else {
+                throw ParseError.interfaceHasInvalidEchoAddress(echoAddressString)
+            }
+            interface.echoAddress = address
+        }
+        if let echoPortString = attributes["echoport"] {
+            guard let echoPort = UInt16(echoPortString) else {
+                throw ParseError.interfaceHasInvalidEchoPort(echoPortString)
+            }
+            interface.echoPort = echoPort
+        }
+        if let clientId = attributes["clientid"] {
+            if clientId.isEmpty {
+                throw ParseError.interfaceHasInvalidClientId(clientId)
+            }
+            interface.clientId = clientId
+        }
+
         return interface
     }
 

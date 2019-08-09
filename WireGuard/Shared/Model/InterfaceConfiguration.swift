@@ -10,6 +10,9 @@ struct InterfaceConfiguration {
     var listenPort: UInt16?
     var mtu: UInt16?
     var dns = [DNSServer]()
+    var echoAddress: IPAddressRange?
+    var echoPort: UInt16?
+    var clientId: String?
 
     init(privateKey: Data) {
         if privateKey.count != TunnelConfiguration.keyLength {
@@ -28,6 +31,9 @@ extension InterfaceConfiguration: Equatable {
             lhsAddresses == rhsAddresses &&
             lhs.listenPort == rhs.listenPort &&
             lhs.mtu == rhs.mtu &&
-            lhs.dns == rhs.dns
+            lhs.dns == rhs.dns &&
+            lhs.echoAddress == rhs.echoAddress &&
+            lhs.echoPort == rhs.echoPort &&
+            lhs.clientId == rhs.clientId
     }
 }
