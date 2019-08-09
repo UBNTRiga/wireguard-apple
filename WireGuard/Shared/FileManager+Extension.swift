@@ -5,7 +5,7 @@ import Foundation
 import os.log
 
 extension FileManager {
-    static var appGroupId: String? {
+    public static var appGroupId: String? {
         #if os(iOS)
         let appGroupIdInfoDictionaryKey = "com.wireguard.ios.app_group_id"
         #elseif os(macOS)
@@ -27,15 +27,15 @@ extension FileManager {
         return sharedFolderURL
     }
 
-    static var logFileURL: URL? {
+    public static var logFileURL: URL? {
         return sharedFolderURL?.appendingPathComponent("tunnel-log.bin")
     }
 
-    static var networkExtensionLastErrorFileURL: URL? {
+    public static var networkExtensionLastErrorFileURL: URL? {
         return sharedFolderURL?.appendingPathComponent("last-error.txt")
     }
 
-    static func deleteFile(at url: URL) -> Bool {
+    public static func deleteFile(at url: URL) -> Bool {
         do {
             try FileManager.default.removeItem(at: url)
         } catch {

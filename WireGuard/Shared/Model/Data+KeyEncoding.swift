@@ -4,11 +4,11 @@
 import Foundation
 
 extension Data {
-    func isKey() -> Bool {
+    public func isKey() -> Bool {
         return self.count == WG_KEY_LEN
     }
 
-    func hexKey() -> String? {
+    public func hexKey() -> String? {
         if self.count != WG_KEY_LEN {
             return nil
         }
@@ -22,7 +22,7 @@ extension Data {
         return String(data: out, encoding: .ascii)
     }
 
-    init?(hexKey hexString: String) {
+    public init?(hexKey hexString: String) {
         self.init(repeating: 0, count: Int(WG_KEY_LEN))
 
         if !self.withUnsafeMutableUInt8Bytes { key_from_hex($0, hexString) } {
@@ -30,7 +30,7 @@ extension Data {
         }
     }
 
-    func base64Key() -> String? {
+    public func base64Key() -> String? {
         if self.count != WG_KEY_LEN {
             return nil
         }
@@ -44,7 +44,7 @@ extension Data {
         return String(data: out, encoding: .ascii)
     }
 
-    init?(base64Key base64String: String) {
+    public init?(base64Key base64String: String) {
         self.init(repeating: 0, count: Int(WG_KEY_LEN))
 
         if !self.withUnsafeMutableUInt8Bytes { key_from_base64($0, base64String) } {
@@ -54,7 +54,7 @@ extension Data {
 }
 
 extension Data {
-    func withUnsafeUInt8Bytes<R>(_ body: (UnsafePointer<UInt8>) -> R) -> R {
+    public func withUnsafeUInt8Bytes<R>(_ body: (UnsafePointer<UInt8>) -> R) -> R {
         assert(!isEmpty)
         return self.withUnsafeBytes { (ptr: UnsafeRawBufferPointer) -> R in
             let bytes = ptr.bindMemory(to: UInt8.self)
@@ -62,7 +62,7 @@ extension Data {
         }
     }
 
-    mutating func withUnsafeMutableUInt8Bytes<R>(_ body: (UnsafeMutablePointer<UInt8>) -> R) -> R {
+    public mutating func withUnsafeMutableUInt8Bytes<R>(_ body: (UnsafeMutablePointer<UInt8>) -> R) -> R {
         assert(!isEmpty)
         return self.withUnsafeMutableBytes { (ptr: UnsafeMutableRawBufferPointer) -> R in
             let bytes = ptr.bindMemory(to: UInt8.self)
@@ -70,7 +70,7 @@ extension Data {
         }
     }
 
-    mutating func withUnsafeMutableInt8Bytes<R>(_ body: (UnsafeMutablePointer<Int8>) -> R) -> R {
+    public mutating func withUnsafeMutableInt8Bytes<R>(_ body: (UnsafeMutablePointer<Int8>) -> R) -> R {
         assert(!isEmpty)
         return self.withUnsafeMutableBytes { (ptr: UnsafeMutableRawBufferPointer) -> R in
             let bytes = ptr.bindMemory(to: Int8.self)

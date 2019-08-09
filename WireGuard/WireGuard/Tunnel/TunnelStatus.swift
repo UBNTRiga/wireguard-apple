@@ -4,7 +4,7 @@
 import Foundation
 import NetworkExtension
 
-@objc enum TunnelStatus: Int {
+@objc public enum TunnelStatus: Int {
     case inactive
     case activating
     case active
@@ -13,7 +13,7 @@ import NetworkExtension
     case restarting // Restarting tunnel (done after saving modifications to an active tunnel)
     case waiting    // Waiting for another tunnel to be brought down
 
-    init(from systemStatus: NEVPNStatus) {
+    public init(from systemStatus: NEVPNStatus) {
         switch systemStatus {
         case .connected:
             self = .active

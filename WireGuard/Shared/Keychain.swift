@@ -4,8 +4,8 @@
 import Foundation
 import Security
 
-class Keychain {
-    static func openReference(called ref: Data) -> String? {
+public class Keychain {
+    public static func openReference(called ref: Data) -> String? {
         var result: CFTypeRef?
         let ret =  SecItemCopyMatching([kSecClass as String: kSecClassGenericPassword,
                                         kSecValuePersistentRef as String: ref,
@@ -19,7 +19,7 @@ class Keychain {
         return String(data: data, encoding: String.Encoding.utf8)
     }
 
-    static func makeReference(containing value: String, called name: String, previouslyReferencedBy oldRef: Data? = nil) -> Data? {
+    public static func makeReference(containing value: String, called name: String, previouslyReferencedBy oldRef: Data? = nil) -> Data? {
         var ret: OSStatus
         guard var id = Bundle.main.bundleIdentifier else {
             wg_log(.error, staticMessage: "Unable to determine bundle identifier")
@@ -84,14 +84,14 @@ class Keychain {
         return ref as? Data
     }
 
-    static func deleteReference(called ref: Data) {
+    public static func deleteReference(called ref: Data) {
         let ret = SecItemDelete([kSecValuePersistentRef as String: ref] as CFDictionary)
         if ret != errSecSuccess {
             wg_log(.error, message: "Unable to delete config from keychain: \(ret)")
         }
     }
 
-    static func deleteReferences(except whitelist: Set<Data>) {
+    public static func deleteReferences(except whitelist: Set<Data>) {
         var result: CFTypeRef?
         let ret = SecItemCopyMatching([kSecClass as String: kSecClassGenericPassword,
                                        kSecAttrService as String: Bundle.main.bundleIdentifier as Any,
@@ -109,7 +109,7 @@ class Keychain {
         }
     }
 
-    static func verifyReference(called ref: Data) -> Bool {
+    public static func verifyReference(called ref: Data) -> Bool {
         return SecItemCopyMatching([kSecClass as String: kSecClassGenericPassword,
                                     kSecValuePersistentRef as String: ref] as CFDictionary,
                                    nil) != errSecItemNotFound

@@ -3,11 +3,11 @@
 
 import Foundation
 
-struct Curve25519 {
+public struct Curve25519 {
 
-    static let keyLength: Int = 32
+    public static let keyLength: Int = 32
 
-    static func generatePrivateKey() -> Data {
+    public static func generatePrivateKey() -> Data {
         var privateKey = Data(repeating: 0, count: TunnelConfiguration.keyLength)
         privateKey.withUnsafeMutableUInt8Bytes { bytes in
             curve25519_generate_private_key(bytes)
@@ -16,7 +16,7 @@ struct Curve25519 {
         return privateKey
     }
 
-    static func generatePublicKey(fromPrivateKey privateKey: Data) -> Data {
+    public static func generatePublicKey(fromPrivateKey privateKey: Data) -> Data {
         assert(privateKey.count == TunnelConfiguration.keyLength)
         var publicKey = Data(repeating: 0, count: TunnelConfiguration.keyLength)
         privateKey.withUnsafeUInt8Bytes { privateKeyBytes in
@@ -30,7 +30,7 @@ struct Curve25519 {
 }
 
 extension InterfaceConfiguration {
-    var publicKey: Data {
+    public var publicKey: Data {
         return Curve25519.generatePublicKey(fromPrivateKey: privateKey)
     }
 }

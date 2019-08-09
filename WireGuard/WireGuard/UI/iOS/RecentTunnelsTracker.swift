@@ -3,7 +3,7 @@
 
 import Foundation
 
-class RecentTunnelsTracker {
+public class RecentTunnelsTracker {
 
     private static let keyRecentlyActivatedTunnelNames = "recentlyActivatedTunnelNames"
     private static let maxNumberOfTunnels = 10
@@ -20,7 +20,7 @@ class RecentTunnelsTracker {
         return userDefaults
     }
 
-    static func handleTunnelActivated(tunnelName: String) {
+    public static func handleTunnelActivated(tunnelName: String) {
         guard let userDefaults = RecentTunnelsTracker.userDefaults else { return }
         var recentTunnels = userDefaults.stringArray(forKey: keyRecentlyActivatedTunnelNames) ?? []
         if let existingIndex = recentTunnels.firstIndex(of: tunnelName) {
@@ -33,7 +33,7 @@ class RecentTunnelsTracker {
         userDefaults.set(recentTunnels, forKey: keyRecentlyActivatedTunnelNames)
     }
 
-    static func handleTunnelRemoved(tunnelName: String) {
+    public static func handleTunnelRemoved(tunnelName: String) {
         guard let userDefaults = RecentTunnelsTracker.userDefaults else { return }
         var recentTunnels = userDefaults.stringArray(forKey: keyRecentlyActivatedTunnelNames) ?? []
         if let existingIndex = recentTunnels.firstIndex(of: tunnelName) {
@@ -42,7 +42,7 @@ class RecentTunnelsTracker {
         }
     }
 
-    static func handleTunnelRenamed(oldName: String, newName: String) {
+    public static func handleTunnelRenamed(oldName: String, newName: String) {
         guard let userDefaults = RecentTunnelsTracker.userDefaults else { return }
         var recentTunnels = userDefaults.stringArray(forKey: keyRecentlyActivatedTunnelNames) ?? []
         if let existingIndex = recentTunnels.firstIndex(of: oldName) {
@@ -51,7 +51,7 @@ class RecentTunnelsTracker {
         }
     }
 
-    static func cleanupTunnels(except tunnelNamesToKeep: Set<String>) {
+    public static func cleanupTunnels(except tunnelNamesToKeep: Set<String>) {
         guard let userDefaults = RecentTunnelsTracker.userDefaults else { return }
         var recentTunnels = userDefaults.stringArray(forKey: keyRecentlyActivatedTunnelNames) ?? []
         let oldCount = recentTunnels.count
@@ -61,7 +61,7 @@ class RecentTunnelsTracker {
         }
     }
 
-    static func recentlyActivatedTunnelNames(limit: Int) -> [String] {
+    public static func recentlyActivatedTunnelNames(limit: Int) -> [String] {
         guard let userDefaults = RecentTunnelsTracker.userDefaults else { return [] }
         var recentTunnels = userDefaults.stringArray(forKey: keyRecentlyActivatedTunnelNames) ?? []
         if limit < recentTunnels.count {
